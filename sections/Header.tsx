@@ -31,14 +31,15 @@ export default function Header({
   },
   navigation = {
     links: [
-      { label: "Home", url: "/" },
-      { label: "About us", url: "/" },
-      { label: "Princing", url: "/" },
-      { label: "Contact", url: "/" },
+      { label: "NOVIDADES", url: "/novidades" },
+      { label: "CACHORROS", url: "/cachorros" },
+      { label: "GATOS", url: "/gatos" },
+      { label: "HUMAN", url: "/human" },
+      { label: "SOBRE", url: "/sobre" },
     ],
     buttons: [
-      { id: "change-me-1", href: "/", text: "Change me", outline: false },
-      { id: "change-me-2", href: "/", text: "Change me", outline: true },
+      { id: "change-me-1", href: "/", text: "Login", outline: false },
+      { id: "change-me-2", href: "/", text: "Cadastro", outline: true },
     ],
   },
 }: Nav) {
@@ -46,12 +47,14 @@ export default function Header({
     <nav class="drawer drawer-end">
       <input id="mobile-drawer-nav" type="checkbox" class="drawer-toggle" />
 
-      {/* main content */}
+      {/* Conteúdo principal */}
       <div class="drawer-content container lg:px-0 px-4 flex gap-8 items-center justify-between py-4">
+        {/* Logo */}
         <a href="/">
           <Image src={logo.src || ""} width={100} height={28} alt={logo.alt} />
         </a>
 
+        {/* Navegação para desktop */}
         <div class="hidden items-center justify-between lg:flex w-full">
           <ul class="flex">
             {navigation.links.map((link) => (
@@ -59,7 +62,7 @@ export default function Header({
                 <a
                   href={link.url}
                   aria-label={link.label}
-                  class="link no-underline hover:underline p-4"
+                  class="link no-underline hover:underline p-4 text-black"
                 >
                   {link.label}
                 </a>
@@ -73,7 +76,7 @@ export default function Header({
                 id={item?.id}
                 href={item?.href ?? "#"}
                 target={item?.href.includes("http") ? "_blank" : "_self"}
-                class={`font-normal btn btn-primary ${
+                class={`font-normal btn btn-primary text-black ${
                   item.outline && "btn-outline"
                 }`}
               >
@@ -83,24 +86,27 @@ export default function Header({
           </ul>
         </div>
 
+        {/* Botão para abrir o menu mobile */}
         <label
           htmlFor="mobile-drawer-nav"
-          class="flex lg:hidden btn btn-ghost drawer-button"
+          class="flex lg:hidden btn btn-ghost drawer-button text-black"
         >
           <Icon id="Bars3" size={24} strokeWidth={0.1} />
         </label>
       </div>
 
-      {/* sidebar */}
+      {/* Menu mobile (sidebar) */}
       <aside class="drawer-side z-50">
-        {/* Close when clicking on overlay */}
+        {/* Overlay para fechar o menu */}
         <label
           htmlFor="mobile-drawer-nav"
           aria-label="close sidebar"
           class="drawer-overlay"
         />
 
+        {/* Conteúdo do menu mobile */}
         <div class="flex flex-col gap-8 min-h-full w-80 bg-base-100 text-base-content">
+          {/* Logo no menu mobile */}
           <a class="p-4" href="/">
             <Image
               src={logo.src || ""}
@@ -110,16 +116,18 @@ export default function Header({
             />
           </a>
 
+          {/* Links do menu mobile */}
           <ul class="menu">
             {navigation?.links.map((link) => (
               <li>
-                <a href={link.url} aria-label={link.label}>
+                <a href={link.url} aria-label={link.label} class="text-black">
                   {link.label}
                 </a>
               </li>
             ))}
           </ul>
 
+          {/* Botões no menu mobile */}
           <ul class="p-4 flex items-center gap-3">
             {navigation.buttons?.map((item) => (
               <a
@@ -127,7 +135,7 @@ export default function Header({
                 id={item?.id}
                 href={item?.href ?? "#"}
                 target={item?.href.includes("http") ? "_blank" : "_self"}
-                class={`font-normal btn btn-primary ${
+                class={`font-normal btn btn-primary text-black ${
                   item.outline && "btn-outline"
                 }`}
               >

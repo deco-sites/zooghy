@@ -1,123 +1,138 @@
+import { useState } from "preact/hooks";
 import type { ImageWidget } from "apps/admin/widgets.ts";
 import Image from "apps/website/components/Image.tsx";
 
-export interface CTA {
-  id?: string;
-  href: string;
-  text: string;
-  style?: "Outline" | "Ghost";
+export interface Product {
+  image: ImageWidget;
+  title: string;
+  price: string;
+  installments: string;
 }
 
 export interface Props {
   title?: string;
-  titlePlacement?: "left" | "right" | "center";
-  /** @format textarea */
-  description?: string;
-  descriptionPlacement?: "left" | "right" | "center" | "justify";
-  tagline?: string;
-  image?: ImageWidget;
-  placement?: "left" | "right";
-  cta?: CTA[];
-  disableSpacing?: {
-    top?: boolean;
-    bottom?: boolean;
-  };
-  ctaPlacement?: "left" | "right" | "center";
+  subtitle?: string;
+  promoImage?: ImageWidget;
+  products?: Product[];
 }
 
-const PLACEMENT = {
-  left: "flex-col md:flex-row-reverse",
-  right: "flex-col md:flex-row",
-};
+const DEFAULT_PRODUCTS: Product[] = [
+  {
+    image:
+      "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/4763/772e246e-1959-46ac-a309-3f25ab20af6f",
+    title: "Pellonil para Carbones Aniquales Fabrey",
+    price: "R$ 129,00",
+    installments: "até 3x sem juros",
+  },
+  {
+    image:
+      "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/4763/772e246e-1959-46ac-a309-3f25ab20af6f",
+    title: "Pellonil Aniquale Sutherland para carbones Voyage",
+    price: "R$ 179,00",
+    installments: "até 3x sem juros",
+  },
+];
 
-const CTA_PLACEMENT = {
-  left: "start",
-  right: "end",
-  center: "center",
-};
-
-const DEFAULT_IMAGE =
-  "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/4763/772e246e-1959-46ac-a309-3f25ab20af6f";
-
-export default function ImageWithParagraph({
-  title = "Here's an intermediate size heading you can edit",
-  titlePlacement = "left",
-  description =
-    "This text is fully editable and ready for your personal touch. Just click here, head over to the section window, or dive straight into the code to make changes as you see fit. Whether it's about the content, formatting, font, or anything in between, editing is just a click away.",
-  descriptionPlacement = "left",
-  tagline = "Tagline",
-  image = DEFAULT_IMAGE,
-  placement = "left",
-  disableSpacing,
-  cta = [
-    { id: "change-me-1", href: "/", text: "Change me", style: "Outline" },
-    { id: "change-me-2", href: "/", text: "Change me", style: "Ghost" },
-  ],
-  ctaPlacement = "left",
+export default function ProductSection({
+  title = "Passeios mais leves",
+  subtitle = "O pedroal perfeito para carbonres que param",
+  promoImage =
+  "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/4763/772e246e-1959-46ac-a309-3f25ab20af6f",
+  products = DEFAULT_PRODUCTS,
 }: Props) {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const handleAddToCart = () => {
+    setIsCartOpen(true);
+  };
+
   return (
-    <div class="lg:container md:max-w-6xl lg:mx-auto mx-4 text-sm">
-      <div
-        class={`flex ${
-          PLACEMENT[placement]
-        } gap-12 md:gap-20 text-left items-center z-10 ${
-          disableSpacing?.top ? "" : "pt-12 lg:pt-28"
-        } ${disableSpacing?.bottom ? "" : "pb-12 lg:pb-28"}`}
-      >
-        <div class="w-full md:w-1/2 border border-secondary rounded-lg overflow-hidden">
+    <div class="lg:container md:max-w-6xl lg:mx-auto mx-4 text-sm py-12">
+      {/* Título e Subtítulo */}
+      <div class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4 text-black">{title}</h1>
+        <p class="text-xl md:text-2xl text-black">{subtitle}</p>
+      </div>
+
+      {/* Botão */}
+      <div class="text-center mb-12">
+        <a
+          href="#"
+          class="bg-black text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-900 transition-colors"
+        >
+          VER ANTIPUXÕES
+        </a>
+      </div>
+
+      {/* Lista de Produtos e Arte de Propaganda */}
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Arte de Propaganda */}
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
           <Image
             width={640}
             height={640}
-            class="object-fit z-10"
-            sizes="(max-width: 640px) 100vw, 30vw"
-            src={image}
-            alt={image}
+            class="w-full h-full object-cover rounded-lg"
+            src={promoImage}
+            alt="Arte de propaganda"
             decoding="async"
             loading="lazy"
           />
         </div>
-        <div class="w-full md:w-1/2 space-y-2 md:space-y-4 md:max-w-xl gap-4 z-10">
-          <p class="text-sm font-semibold">
-            {tagline}
-          </p>
-          <p class="text-4xl leading-snug" style={`text-align:${titlePlacement}`}>
-            {title}
-          </p>
-          <p class="leading-normal" style={`text-align:${descriptionPlacement}`}>
-            {description}
-          </p>
-          <div class={`flex gap-3 pt-4 justify-${CTA_PLACEMENT[ctaPlacement]}`}>
-            {cta?.map((item) => (
-              <a
-                key={item?.id}
-                id={item?.id}
-                href={item?.href}
-                target={item?.href.includes("http") ? "_blank" : "_self"}
-                class={`font-normal btn btn-primary
-                  ${!item.style || item.style == "Outline" && "btn-outline"}
-                  ${item.style == "Ghost" && "btn-ghost"}
-                `}
+
+        {/* Produtos */}
+        {products.map((product) => (
+          <div class="border border-gray-200 rounded-lg overflow-hidden">
+            {/* Imagem do Produto */}
+            <Image
+              width={640}
+              height={640}
+              class="w-full h-64 object-cover rounded-lg"
+              src={product.image}
+              alt={product.title}
+              decoding="async"
+              loading="lazy"
+            />
+
+            {/* Detalhes do Produto */}
+            <div class="p-6">
+              <h2 class="text-xl font-semibold mb-4 text-black">{product.title}</h2>
+              <p class="text-2xl font-bold mb-4 text-black">{product.price}</p>
+              <p class="text-gray-600 mb-6">{product.installments}</p>
+
+              {/* Botão de Adicionar ao Carrinho */}
+              <button
+                onClick={handleAddToCart}
+                class="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-900 transition-colors"
               >
-                {item?.text}
-                {item.style == "Ghost" && (
-                  <svg
-                    width="24"
-                    height="25"
-                    viewBox="0 0 24 25"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M9.70697 16.9767L15.414 11.2697L9.70697 5.56274L8.29297 6.97674L12.586 11.2697L8.29297 15.5627L9.70697 16.9767Z"
-                      fill="#18181B"
-                    />
-                  </svg>
-                )}
-              </a>
-            ))}
+                Adicionar ao Carrinho
+              </button>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
+
+      {/* Carrinho (Overlay e Sidebar) */}
+      {isCartOpen && (
+        <>
+          {/* Overlay Escuro */}
+          <div
+            class="fixed inset-0 bg-black opacity-50 z-40"
+            onClick={() => setIsCartOpen(false)}
+          ></div>
+
+          {/* Sidebar do Carrinho */}
+          <div class="fixed inset-y-0 left-0 w-96 bg-white z-50 p-6 shadow-lg">
+            <h2 class="text-2xl font-bold mb-6 text-black">Carrinho</h2>
+            <p class="text-gray-600">Seu carrinho está vazio.</p>
+            <button
+              onClick={() => setIsCartOpen(false)}
+              class="bg-black text-white px-6 py-2 rounded-lg mt-4 hover:bg-gray-900 transition-colors"
+            >
+              Fechar Carrinho
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

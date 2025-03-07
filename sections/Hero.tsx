@@ -1,100 +1,51 @@
 import type { ImageWidget } from "apps/admin/widgets.ts";
 import Image from "apps/website/components/Image.tsx";
 
-export interface CTA {
-  id?: string;
-  href: string;
-  text: string;
-  outline?: boolean;
-}
-
 export interface Props {
-  /**
-   * @format rich-text
-   * @default Click here to tweak this text however you want.
-   */
   title?: string;
-  /**
-   * @default This text is fully editable and ready for your personal touch. Just click here, head over to the section window, or dive straight into the code to make changes as you see fit. Whether it's about the content, formatting, font, or anything in between, editing is just a click away.
-   */
-  description?: string;
+  subtitle?: string;
+  buttonText?: string;
   image?: ImageWidget;
-  placement?: "left" | "right";
-  cta?: CTA[];
 }
 
-const PLACEMENT = {
-  left: "flex-col text-left lg:flex-row-reverse",
-  right: "flex-col text-left lg:flex-row",
-};
-
-export default function HeroFlats({
-  title = "Click here to tweak this text however you want.",
-  description =
-    "This text is fully editable and ready for your personal touch. Just click here, head over to the section window, or dive straight into the code to make changes as you see fit. Whether it's about the content, formatting, font, or anything in between, editing is just a click away.",
-  image,
-  placement = "left",
-  cta = [
-    { id: "change-me-1", href: "/", text: "Change me", outline: false },
-    { id: "change-me-2", href: "/", text: "Change me", outline: true },
-  ],
+export default function HeroSection({
+  title = "Passeios mais leves",
+  subtitle = "O pedroal perfeito para cachorros que puxam",
+  buttonText = "VER ANTIPUXÕES",
+  image = "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/4763/772e246e-1959-46ac-a309-3f25ab20af6f",
 }: Props) {
   return (
-    <nav class="lg:container lg:mx-auto mx-4">
-      <div class="flex flex-col items-center gap-8">
-        <div
-          class={`flex w-full xl:container xl:mx-auto py-20 mx-5 md:mx-10 z-10 ${
-            image
-              ? PLACEMENT[placement]
-              : "flex-col items-center justify-center text-center"
-          } lg:py-36 gap-12 md:gap-20 items-center`}
+    <div class="w-full h-screen relative">
+      {/* Imagem de fundo */}
+      <Image
+        width={1920}
+        height={1080}
+        class="w-full h-full object-cover rounded-lg"
+        src={image}
+        alt="Imagem de fundo"
+        decoding="async"
+        loading="lazy"
+      />
+
+      {/* Overlay escuro para melhorar a legibilidade do texto */}
+      <div class="absolute inset-0 bg-black opacity-40"></div>
+
+      {/* Conteúdo centralizado */}
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
+        {/* Título */}
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
+
+        {/* Subtítulo */}
+        <p class="text-xl md:text-2xl mb-8">{subtitle}</p>
+
+        {/* Botão */}
+        <a
+          href="#"
+          class="bg-black text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-900 transition-colors"
         >
-          {image && (
-            <Image
-              width={640}
-              class="w-full lg:w-1/2 object-fit"
-              sizes="(max-width: 640px) 100vw, 30vw"
-              src={image}
-              alt={image}
-              decoding="async"
-              loading="lazy"
-            />
-          )}
-          <div
-            class={`mx-6 lg:mx-auto lg:w-full space-y-4 gap-4 ${
-              image
-                ? "lg:w-1/2 lg:max-w-xl"
-                : "flex flex-col items-center justify-center lg:max-w-3xl"
-            }`}
-          >
-            <div
-              class="inline-block lg:text-[80px] text-4xl leading-none font-medium"
-              dangerouslySetInnerHTML={{
-                __html: title,
-              }}
-            >
-            </div>
-            <p class="text-lg md:text-md leading-[150%]">
-              {description}
-            </p>
-            <div class="flex items-center gap-3">
-              {cta?.map((item) => (
-                <a
-                  key={item?.id}
-                  id={item?.id}
-                  href={item?.href}
-                  target={item?.href.includes("http") ? "_blank" : "_self"}
-                  class={`font-normal btn btn-primary ${
-                    item.outline && "btn-outline"
-                  }`}
-                >
-                  {item?.text}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
+          {buttonText}
+        </a>
       </div>
-    </nav>
+    </div>
   );
 }
